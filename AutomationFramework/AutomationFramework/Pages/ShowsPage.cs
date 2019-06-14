@@ -12,44 +12,44 @@ namespace AutomationFramework.Pages
         {
         }
 
-        private string lnkAll = "a[href='/shows\all']";
+        private string lnkAll = "a[href='/shows/all']";
         private string lnkCurrent = "a[href='/shows/current']";
-        private string lnkUpcoming = "a[href='/shows/upcоming']";
+        private string lnkUpcoming = "a[href='/shows/upcoming']";
         private string lnkThrowBack = "a[href='/shows/classic-throwback']";
-
-        private string lnkShowBlockByText(string text) => $"//div[@text='{text}']/../../..";
+        private string lnkShowBlockByText(string text) => $"//div[contains(text(),'{text}')]/../../..";
 
         public ShowsPage ClickAll()
         {
-            driver.FindElement(By.CssSelector(lnkAll)).Click();
+            WaitForElementPresent(By.CssSelector(lnkAll)).Click();
             return WaitForPageLoaded();
         }
         public ShowsPage ClickCurrent()
         {
-            driver.FindElement(By.CssSelector(lnkCurrent)).Click();
+            WaitForElementPresent(By.CssSelector(lnkCurrent)).Click();
             return WaitForPageLoaded();
         }
         public ShowsPage ClickUpcoming()
         {
-            driver.FindElement(By.CssSelector(lnkUpcoming)).Click();
+            WaitForElementPresent(By.CssSelector(lnkUpcoming)).Click();
             return WaitForPageLoaded();
         }
         public ShowsPage ClickThrowback()
         {
-            driver.FindElement(By.CssSelector(lnkThrowBack)).Click();
+            WaitForElementPresent(By.CssSelector(lnkThrowBack)).Click();
             return WaitForPageLoaded();
         }
 
         public SerialPage ClickOnShowBlockByName(string name)
         {
-            driver.FindElement(By.XPath(lnkShowBlockByText(name))).Click();
+            WaitForElementPresent(By.XPath(lnkShowBlockByText(name))).Click();
             return new SerialPage(driver).WaitForPageLoaded();
         }
 
-        public bool IsShowBlockByNameExist(string name) => driver.FindElement(By.XPath(lnkShowBlockByText(name))).Count < 0;
+        public bool IsShowBlockByNameExist(string name) => IsElementDisplayed(By.XPath(lnkShowBlockByText(name)));
 
         public ShowsPage WaitForPageLoaded()
         {
+            WaitForAnyPageLoaded();
             return this;
         }
     }

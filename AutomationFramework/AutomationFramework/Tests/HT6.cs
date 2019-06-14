@@ -16,25 +16,23 @@ namespace AutomationFramework.Tests
         [Category("Functional")]
         public void HT6Test()
         {
-            Driver1 = CreateDriver();
-            NavigateToSite(Driver1);
-
             var expectedActorsCount = 7;
             var JamesSpader = "James Spader";
             var Mozhan = "Mozhan Marnò";
             var Hisham = "Hisham Tawfiq ";
             var Megan = "Megan Boone";
 
-            var headerPage = new NBCHeader(Driver1);
-            var nbcShows = headerPage
-                .ClickSHows();
+            var nbcShows = NavigateToNBCSite()
+                .ClickShows();
 
             Assert.That(nbcShows.IsShowBlockByNameExist(nbcSerialName),
                         Is.True, $"Сериала с именем {nbcSerialName} нет");
 
-            var serialPage = nbcShows.ClickOnShowBlockByName(nbcSerialName);
-
-            serialPage.ClickAddToFavorite().ClosePopUpIfPresent().ClickCast();
+            var serialPage = nbcShows
+                .ClickOnShowBlockByName(nbcSerialName)
+                .ClickAddToFavorite()
+                .ClosePopUpIfPresent()
+                .ClickCast();
 
 
             Assert.Multiple(() =>

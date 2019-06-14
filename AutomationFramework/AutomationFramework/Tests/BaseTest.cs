@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using AutomationFramework.Pages;
+using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Remote;
@@ -11,25 +12,25 @@ namespace AutomationFramework.Tests
     [Parallelizable(ParallelScope.Fixtures)]
     public class BaseTest
     {
-        protected IWebDriver Driver1;
-        protected IWebDriver Driver2;
+        protected IWebDriver driver;
 
         [SetUp]
-        public void CreateAndPushDrivers()
+        public void CreateAndPushDriver()
         {
-            Driver1?.Quit();
-            Driver2?.Quit();
+            driver = new ChromeDriver();
         }
 
-        [OneTimeTearDown]
+        [TearDown]
         public void ModifyDrivers()
         {
+            driver?.Quit();
         }
 
-        public void NavigateToSite(IWebDriver driver)
+        public NBCHeader NavigateToNBCSite()
         {
             driver.Manage().Window.Maximize();
             driver.Navigate().GoToUrl("https://www.nbc.com");
+            return new NBCHeader(driver);
         }
     }
 }

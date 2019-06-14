@@ -5,31 +5,32 @@ using System.Text;
 
 namespace AutomationFramework.Pages
 {
-    public class SerialPage
+    public class SerialPage : BasePage
     {
         private const string btnAddToFavorite = "div.show-header__menu a.navigation__item__link--favorite-add";
         private const string btnCast = "a[href$='/cast']";
         private const string lstActors = ".shelf__tiles a";
-        private string lnkActor(string name) => $"//*[@class='tile__description__part-bold' and text()='{name}']";
+        private string lnkActor(string name) => $"//span[contains(text(),'{name}')]/../../../../..";
 
         private const string btnMore = ".bio__long-desc__more";
         private const string btnLess = ".bio__long-desc__more--active";
 
         private const string btnClosePopUp = ".modal__icon__exit";
 
-        public SerialPage(IWebDriver driver)
+        public SerialPage(IWebDriver driver) : base(driver)
         {
         }
 
         public SerialPage ClosePopUpIfPresent()
         {
-            driver.FindElement(By.CssSelector(btnClosePopUp)).Click();
+            WaitForElementPresent(By.CssSelector(btnClosePopUp)).Click();
             return WaitForPageLoaded();
         }
 
         public SerialPage WaitForPageLoaded()
         {
-            return WaitForAnyPageLoaded();
+            WaitForAnyPageLoaded();
+            return this;
         }
 
         public SerialPage ClickAddToFavorite()
@@ -38,7 +39,7 @@ namespace AutomationFramework.Pages
             return WaitForPageLoaded();
         }
 
-        public bool IsActorPresent(string name) => driver.FindElements(By.XPath(lnkActor(name))).Count == 0;
+        public bool IsActorPresent(string name) => IsElementDisplayed(By.XPath(lnkActor(name)));
 
         public SerialPage ClickOnActor(string name)
         {
@@ -48,7 +49,6 @@ namespace AutomationFramework.Pages
         public SerialPage ClickCast()
         {
             WaitForElementPresent(By.CssSelector(btnCast)).Click();
-
             return WaitForPageLoaded();
         }
 
@@ -60,6 +60,6 @@ namespace AutomationFramework.Pages
             return WaitForPageLoaded();
         }
          
-        public bool IsLessButtonDisplayed() => driver.FindElements(By.CssSelector(btnLess)).Count > 0;
+        public bool IsLessButtonDisplayed() => IsElementDisplayed(By.CssSelector(btnLess));
     }
 }
