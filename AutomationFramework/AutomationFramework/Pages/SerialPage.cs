@@ -5,7 +5,7 @@ using System.Text;
 
 namespace AutomationFramework.Pages
 {
-    public class SerialPage
+    public class SerialPage : BasePage
     {
         private const string btnAddToFavorite = "div.show-header__menu a.navigation__item__link--favorite-add";
         private const string btnCast = "a[href$='/cast']";
@@ -17,8 +17,9 @@ namespace AutomationFramework.Pages
 
         private const string btnClosePopUp = ".modal__icon__exit";
 
-        public SerialPage(IWebDriver driver)
+        public SerialPage(IWebDriver driver) : base(driver)
         {
+            this.driver = driver;
         }
 
         public SerialPage ClosePopUpIfPresent()
@@ -29,7 +30,8 @@ namespace AutomationFramework.Pages
 
         public SerialPage WaitForPageLoaded()
         {
-            return WaitForAnyPageLoaded();
+            WaitForAnyPageLoaded();
+            return this;
         }
 
         public SerialPage ClickAddToFavorite()
@@ -48,7 +50,6 @@ namespace AutomationFramework.Pages
         public SerialPage ClickCast()
         {
             WaitForElementPresent(By.CssSelector(btnCast)).Click();
-
             return WaitForPageLoaded();
         }
 

@@ -16,16 +16,14 @@ namespace AutomationFramework.Tests
         [Category("Functional")]
         public void HT6Test()
         {
-            Driver1 = CreateDriver();
-            NavigateToSite(Driver1);
-
+            Driver = CreateDriver();
             var expectedActorsCount = 7;
             var JamesSpader = "James Spader";
             var Mozhan = "Mozhan Marnò";
             var Hisham = "Hisham Tawfiq ";
             var Megan = "Megan Boone";
 
-            var headerPage = new NBCHeader(Driver1);
+            var headerPage = new NBCHeader(Driver);
             var nbcShows = headerPage
                 .ClickSHows();
 
