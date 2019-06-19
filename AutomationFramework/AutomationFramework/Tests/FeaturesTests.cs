@@ -2,10 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using AutomationFramework.Utils;
 
 namespace AutomationFramework.Tests
 {
-    public class FeaturesTests: BaseTest
+    public class FeaturesTests : BaseTest
     {
         [Test]
         [Description("The most stable test")]
@@ -20,53 +21,32 @@ namespace AutomationFramework.Tests
             Assert.Ignore("Will be ignored. Reason");
         }
 
-        public class AssertTest : BaseTest
+        [Test]
+        [Category("AssertTests")]
+        public void Assertion()
         {
-            private int Return5()
+            Assert.Multiple(() =>
             {
-                var number = new Random().Next(7);
-                TestContext.Progress.WriteLine($"Generated number: {number}");
-                return number;
-            }
-
-            [Test]
-            public void Assertion()
-            {
-                Assert.Multiple(() => 
-                {
-                    Assert.True(Return5() == 6, "Expected");
-                    Assert.That(() => Return5() == 7, Is.True, "Unexpected");
-                    Assert.That(Return5(), Is.Not.EqualTo(8), "Unexpected");
-                });
-            }
+                Assert.That(() => Heplers.ReturnRandomIntTenAsMax() == 6, Is.True.After(30).Seconds.PollEvery(1).Seconds, "Unexpected");
+                Assert.That(() => Heplers.ReturnRandomIntTenAsMax() == 7, Is.True.After(30).Seconds.PollEvery(1).Seconds, "Unexpected");
+                Assert.That(Heplers.ReturnRandomIntTenAsMax(), Is.Not.EqualTo(11), "Unexpected");
+            });
         }
 
-        public class AssertDuringTimeTest : BaseTest
+        [Test]
+        [Category("AssertDuringTimeTests")]
+        public void AssertDuringTime()
         {
-
-            private int Return5()
-            {
-                var number = new Random().Next(10);
-                TestContext.Progress.WriteLine($"Generated number: {number}");
-                return number;
-            }
-
-            [Test]
-            public void AssertDuringTime()
-            {
-                Assert.That(() => Return5(), Is.EqualTo(8).After(30).Seconds.PollEvery(1).Seconds);
-            }
+            Assert.That(() => Heplers.ReturnRandomIntTenAsMax(), Is.EqualTo(8).After(30).Seconds.PollEvery(1).Seconds);
         }
 
-        public class Params : BaseTest
+        [Test]
+        [TestCase(7)]
+        [TestCase(5)]
+        [Category("ParamTests")]        
+        public void ParamsTest(int number)
         {
-            [TestCase(7)]
-            [TestCase(5)]
-            [Test]
-            public void ParamsTest(int number)
-            {
-                Assert.That(number > 6, Is.True,  "Unexpected number");
-            }
+            Assert.That(number > 6, Is.True, "Unexpected number");
         }
     }
 }

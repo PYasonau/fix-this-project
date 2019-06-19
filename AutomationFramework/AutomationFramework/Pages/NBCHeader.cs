@@ -8,7 +8,7 @@ namespace AutomationFramework.Pages
 {
     public class NBCHeader : BasePage
     {
-        private static string lnkShowsLocator = "a[href='/sows']";
+        private static string lnkShowsLocator = "a[href='/shows']";
         private static string lnkEpisodesLocator = "a[href='/video']";
         private static string lnkScheduleLocator = "a[href='/schedule']";
         private static string lnkNewsSportsLocator = "//*[contains(text(), 'Sports')]/.."; //XPath locator
@@ -17,16 +17,7 @@ namespace AutomationFramework.Pages
         private static string lnkAppLocator = "a[href='/apps']";
         private static string btnSearchLocator = "[class$='search'] button";
 
-        public bool IsShowBlockByNameExist(string nbcSerialName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public object ClickOnShowBlockByName(string nbcSerialName)
-        {
-            throw new NotImplementedException();
-        }
-
+        private IWebElement lnkShows => driver.FindElement(By.CssSelector(lnkShowsLocator));
         private IWebElement lnkEpisodes => driver.FindElement(By.CssSelector(lnkEpisodesLocator));
         private IWebElement lnkSchedule => driver.FindElement(By.CssSelector(lnkScheduleLocator));
         private IWebElement lnkNewsSports => driver.FindElement(By.CssSelector(lnkNewsSportsLocator));
@@ -41,6 +32,7 @@ namespace AutomationFramework.Pages
         public ShowsPage ClickSHows()
         {
             WaitForElementPresent(By.CssSelector(lnkShowsLocator)).Click();
+            WaitForAnyPageLoaded();
             return new ShowsPage(driver);
         }
     }

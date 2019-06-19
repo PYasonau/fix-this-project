@@ -16,7 +16,7 @@ namespace AutomationFramework.Pages
 
         private By spinner = By.CssSelector(".basic-loading-page.basic-loading-page--show-page");
 
-        public bool IsElementPresent(By locator) => driver.FindElements(locator).Count == 0;
+        public bool IsElementPresent(By locator) => driver.FindElements(locator).Count > 0;
 
         public IWebElement WaitForElementPresent(By locator, int timeInSeconds = 15)
         {

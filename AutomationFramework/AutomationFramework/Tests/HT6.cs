@@ -27,20 +27,21 @@ namespace AutomationFramework.Tests
             var nbcShows = headerPage
                 .ClickSHows();
 
-            Assert.That(nbcShows.IsShowBlockByNameExist(nbcSerialName),
-                        Is.True, $"Сериала с именем {nbcSerialName} нет");
+            Assert.That(() => nbcShows.IsShowBlockByNameExist(nbcSerialName),
+                        Is.True.After(20 * 1000, 1000), $"Сериала с именем {nbcSerialName} нет");
 
-            var serialPage = nbcShows.ClickOnShowBlockByName(nbcSerialName);
-
-            serialPage.ClickAddToFavorite().ClosePopUpIfPresent().ClickCast();
-
+            var serialPage = nbcShows
+                .ClickOnShowBlockByName(nbcSerialName)
+                .ClickAddToFavorite()
+                .ClosePopUpIfPresent()
+                .ClickCast();
 
             Assert.Multiple(() =>
             {
                 Assert.That(() => serialPage.GetActorsCount(), Is.EqualTo(expectedActorsCount).After(30 * 1000, 1 * 1000), "Actors count is not as expected");
-                Assert.That(serialPage.IsActorPresent(JamesSpader), Is.True, $"Actor {JamesSpader} is not present");
-                Assert.That(serialPage.IsActorPresent(Mozhan), Is.True, $"Actor {Mozhan} is not present");
-                Assert.That(serialPage.IsActorPresent(Hisham), Is.True, $"Actor {Hisham} is not present");
+                Assert.That(serialPage.IsActorPresent(JamesSpader), Is.True.After(30 * 1000, 1 * 1000), $"Actor {JamesSpader} is not present");
+                Assert.That(serialPage.IsActorPresent(Mozhan), Is.True.After(30 * 1000, 1 * 1000), $"Actor {Mozhan} is not present");
+                Assert.That(serialPage.IsActorPresent(Hisham), Is.True.After(30 * 1000, 1 * 1000), $"Actor {Hisham} is not present");
             });
             serialPage.ClickOnActor(Megan).ClickMoreButton();
 

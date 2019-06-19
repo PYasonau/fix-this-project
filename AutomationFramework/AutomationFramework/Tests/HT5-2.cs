@@ -13,7 +13,7 @@ namespace AutomationFramework.Tests
         private string nbcSerialName = "The Blacklist";
 
         [Test]
-        [Description("New Description")]
+        [Category("Functional")]
         public void HT52Test()
         {
             Driver = CreateDriver();
