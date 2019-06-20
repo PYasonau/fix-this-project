@@ -1,8 +1,4 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Support.PageObjects;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AutomationFramework.Pages
 {
@@ -35,7 +31,7 @@ namespace AutomationFramework.Pages
         }
         public NBCHeader WaitForPageLoaded()
         {
-            return WaitForPageLoaded();
+            return (NBCHeader)WaitForAnyPageLoaded();
         }
     }
 }

@@ -1,10 +1,6 @@
 ﻿using AutomationFramework.Pages;
+using NUnit.Allure.Core;
 using NUnit.Framework;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AutomationFramework.Tests
 {
@@ -16,17 +12,27 @@ namespace AutomationFramework.Tests
         [Description("HT52Test Description")]
         public void HT52Test()
         {
-            var  nbcShows = NavigateToNBCSite()
+            Allure.WrapInStep(() =>
+            {
+                NavigateToNBCSite();
+            }, "Step1: Navigate To NBC Site");
+
+            Allure.WrapInStep(() =>
+            {
+                var nbcShows = new NBCHeader(driver)
                 .ClickShows()
                 .ClickCurrent()
                 .ClickUpcoming()
                 .ClickThrowback()
                 .ClickAll();
-
-            Assert.That(nbcShows.IsShowBlockByNameExist(nbcSerialName),
+                Assert.That(nbcShows.IsShowBlockByNameExist(nbcSerialName),
                 Is.True, $"Сериала с именем {nbcSerialName} нет");
+            }, "Step2: Check if the series exists");
 
-            nbcShows.ClickOnShowBlockByName(nbcSerialName);
+            Allure.WrapInStep(() =>
+            {
+                new ShowsPage(driver).ClickOnShowBlockByName(nbcSerialName);
+            }, "Step3: Open series page");
         }
     }
 }

@@ -1,33 +1,40 @@
-﻿using NUnit.Framework;
+﻿using NUnit.Allure.Core;
+using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AutomationFramework.Tests
 {
     public class FeaturesTests
     {
-        public class PassTest 
+        public class PassTest : BaseTest
         {
             [Description("PassedTest Description")]
             [Test]
             public void PassedTest()
             {
-                Assert.Pass("this test will pass");
+                Allure.WrapInStep(() =>
+                {
+                    Console.WriteLine("This test will pass in step1!");
+                    Assert.Pass("this test will pass");
+                }, "Step1");
             }
         }
 
-        public class IgnoreTest
+        public class IgnoreTest : BaseTest
         {
             [Test]
             public void Ignored()
             {
-                Assert.Ignore("Will be ignored. Reason");
+                Allure.WrapInStep(() =>
+                {
+                    Console.WriteLine("This test will be ignored step1!");
+                    Assert.Ignore("Will be ignored. Reason");
+                }, "Step1");
             }
         }
 
 
-        public class AssertTest
+        public class AssertTest : BaseTest
         {
 
             private int Return5() => 5;
@@ -35,16 +42,19 @@ namespace AutomationFramework.Tests
             [Test]
             public void Assertion()
             {
-                Assert.Multiple(() => 
+                Allure.WrapInStep(() =>
                 {
-                    Assert.True(Return5() != 6, "Unexpected");
-                    Assert.That(Return5() == 5, Is.True, "Unexpected");
-                    Assert.That(Return5(), Is.Not.EqualTo(8), "Unexpected");
-                });
+                    Assert.Multiple(() =>
+                    {
+                        Assert.True(Return5() != 6, "Unexpected");
+                        Assert.That(Return5() == 5, Is.True, "Unexpected");
+                        Assert.That(Return5(), Is.Not.EqualTo(8), "Unexpected");
+                    });
+                }, "Step1");
             }
         }
 
-        public class AssertDuringTimeTest
+        public class AssertDuringTimeTest : BaseTest
         {
 
             private int ReturnRandomNumber()
@@ -57,11 +67,14 @@ namespace AutomationFramework.Tests
             [Test]
             public void AssertDuringTime()
             {
-                Assert.That(() => ReturnRandomNumber(), Is.EqualTo(8).After(30).Seconds.PollEvery(1).Seconds);
+                Allure.WrapInStep(() =>
+                {
+                    Assert.That(() => ReturnRandomNumber(), Is.EqualTo(8).After(30).Seconds.PollEvery(1).Seconds);
+                }, "Step1");
             }
         }
 
-        public class Params
+        public class Params : BaseTest
         {
             static int[] Numbers = new int[] { 2, 4, 6, 8 };
 
@@ -69,7 +82,10 @@ namespace AutomationFramework.Tests
             [TestCase(10)]
             public void ParamsTest(int number)
             {
-                Assert.False(number == 7, "Unexpected number");
+                Allure.WrapInStep(() =>
+                {
+                    Assert.False(number == 7, "Unexpected number");
+                }, "Step1");
             }
         }
     }

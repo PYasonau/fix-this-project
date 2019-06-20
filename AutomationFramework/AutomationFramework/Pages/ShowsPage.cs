@@ -1,7 +1,4 @@
 ﻿using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AutomationFramework.Pages
 {
@@ -49,8 +46,7 @@ namespace AutomationFramework.Pages
 
         public ShowsPage WaitForPageLoaded()
         {
-            WaitForAnyPageLoaded();
-            return this;
+            return (ShowsPage)WaitForAnyPageLoaded();
         }
     }
 }

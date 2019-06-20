@@ -1,27 +1,38 @@
-﻿using AutomationFramework.Pages;
+﻿using Allure.Commons;
+using AutomationFramework.Pages;
+using NUnit.Allure.Core;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Remote;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.IO;
 
 namespace AutomationFramework.Tests
 {
+    public class AllureBase
+    {
+        [OneTimeSetUp]
+        public void SetAllureEnvironmentVariable()
+        {
+            Environment.SetEnvironmentVariable("ALLURE_CONFIG", Path.Combine(TestContext.CurrentContext.WorkDirectory, "allureConfig.json"));
+        }
+    }
+
     [Parallelizable(ParallelScope.Fixtures)]
-    public class BaseTest
+    [AllureNUnit]
+    public class BaseTest : AllureBase
     {
         protected IWebDriver driver;
+        protected static AllureLifecycle Allure = AllureLifecycle.Instance;
 
         [SetUp]
-        public void CreateAndPushDriver()
+        public void CreateDriver()
         {
             driver = new ChromeDriver();
         }
 
         [TearDown]
-        public void ModifyDrivers()
+        public void DeleteDriver()
         {
             driver?.Quit();
         }

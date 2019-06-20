@@ -1,10 +1,6 @@
 ﻿using AutomationFramework.Pages;
+using NUnit.Allure.Core;
 using NUnit.Framework;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AutomationFramework.Tests
 {
@@ -22,29 +18,43 @@ namespace AutomationFramework.Tests
             var Hisham = "Hisham Tawfiq ";
             var Megan = "Megan Boone";
 
-            var nbcShows = NavigateToNBCSite()
-                .ClickShows();
+            Allure.WrapInStep(() =>
+            {
+                NavigateToNBCSite();
+            }, "Step1: Navigate To NBC Site");
 
-            Assert.That(nbcShows.IsShowBlockByNameExist(nbcSerialName),
+            Allure.WrapInStep(() =>
+            {
+                var nbcShows = new NBCHeader(driver).ClickShows();
+                Assert.That(nbcShows.IsShowBlockByNameExist(nbcSerialName),
                         Is.True, $"Сериала с именем {nbcSerialName} нет");
+            }, "Step2: Check if the series exists");
 
-            var serialPage = nbcShows
+            Allure.WrapInStep(() =>
+            {
+                var serialPage = new ShowsPage(driver)
                 .ClickOnShowBlockByName(nbcSerialName)
                 .ClickAddToFavorite()
                 .ClosePopUpIfPresent()
                 .ClickCast();
+                Assert.Multiple(() =>
+                {
+                    Assert.That(() => serialPage.GetActorsCount(), Is.EqualTo(expectedActorsCount).After(30 * 1000, 1 * 1000), "Actors count is not as expected");
+                    Assert.That(serialPage.IsActorPresent(JamesSpader), Is.True, $"Actor {JamesSpader} is not present");
+                    Assert.That(serialPage.IsActorPresent(Mozhan), Is.True, $"Actor {Mozhan} is not present");
+                    Assert.That(serialPage.IsActorPresent(Hisham), Is.True, $"Actor {Hisham} is not present");
+                });
+            }, "Step3: Check number of actors and name of actors in Cast tab");
 
-
-            Assert.Multiple(() =>
+            Allure.WrapInStep(() =>
             {
-                Assert.That(() => serialPage.GetActorsCount(), Is.EqualTo(expectedActorsCount).After(30 * 1000, 1 * 1000), "Actors count is not as expected");
-                Assert.That(serialPage.IsActorPresent(JamesSpader), Is.True, $"Actor {JamesSpader} is not present");
-                Assert.That(serialPage.IsActorPresent(Mozhan), Is.True, $"Actor {Mozhan} is not present");
-                Assert.That(serialPage.IsActorPresent(Hisham), Is.True, $"Actor {Hisham} is not present");
-            });
-            serialPage.ClickOnActor(Megan).ClickMoreButton();
+                new SerialPage(driver).ClickOnActor(Megan).ClickMoreButton();
+            }, "Step4: Click on More button");
 
-            Assert.That(serialPage.IsLessButtonDisplayed(), Is.True, "Button Less is not present");
+            Allure.WrapInStep(() =>
+            {
+                Assert.That(new SerialPage(driver).IsLessButtonDisplayed(), Is.True, "Button Less is not present");
+            }, "Step5: Check if the Less button exists");
         }
     }
 }

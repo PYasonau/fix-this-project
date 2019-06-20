@@ -1,8 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AutomationFramework.Pages
 {
@@ -21,16 +19,17 @@ namespace AutomationFramework.Pages
         public IWebElement WaitForElementPresent(By locator, int timeInSeconds = 10) => 
             new WebDriverWait(driver, TimeSpan.FromSeconds(timeInSeconds)).Until(ExpectedConditions.ElementIsVisible(locator));
 
-        public void WaitForElementNotPresent(By locator, int timeInSeconds = 10)
+        public BasePage WaitForElementNotPresent(By locator, int timeInSeconds = 10)
         {
             new WebDriverWait(driver, TimeSpan.FromSeconds(timeInSeconds)).Until((IWebDriver d) => !IsElementPresent(locator));
+            return this;
         }
 
         public bool IsElementDisplayed(By locator, int timeInSeconds = 10) =>
             new WebDriverWait(driver, TimeSpan.FromSeconds(timeInSeconds)).Until((IWebDriver d) => driver.FindElements(locator).Count > 0);
-        public void WaitForAnyPageLoaded()
+        public BasePage WaitForAnyPageLoaded()
         {
-            WaitForElementNotPresent(spinner);
+            return WaitForElementNotPresent(spinner);
         }
     }
 }
