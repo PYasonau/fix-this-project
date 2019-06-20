@@ -1,35 +1,47 @@
-﻿using NUnit.Framework;
+﻿using Allure.Commons;
+using AutomationFramework.Pages;
+using NUnit.Allure.Core;
+using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Remote;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.IO;
 
 namespace AutomationFramework.Tests
 {
-    [Parallelizable(ParallelScope.Fixtures)]
-    public class BaseTest
+    public class AllureBase
     {
-        protected IWebDriver Driver1;
-        protected IWebDriver Driver2;
+        [OneTimeSetUp]
+        public void SetAllureEnvironmentVariable()
+        {
+            Environment.SetEnvironmentVariable("ALLURE_CONFIG", Path.Combine(TestContext.CurrentContext.WorkDirectory, "allureConfig.json"));
+        }
+    }
+
+    [Parallelizable(ParallelScope.Fixtures)]
+    [AllureNUnit]
+    public class BaseTest : AllureBase
+    {
+        protected IWebDriver driver;
+        protected static AllureLifecycle Allure = AllureLifecycle.Instance;
 
         [SetUp]
-        public void CreateAndPushDrivers()
+        public void CreateDriver()
         {
-            Driver1?.Quit();
-            Driver2?.Quit();
+            driver = new ChromeDriver();
         }
 
-        [OneTimeTearDown]
-        public void ModifyDrivers()
+        [TearDown]
+        public void DeleteDriver()
         {
+            driver?.Quit();
         }
 
-        public void NavigateToSite(IWebDriver driver)
+        public NBCHeader NavigateToNBCSite()
         {
             driver.Manage().Window.Maximize();
             driver.Navigate().GoToUrl("https://www.nbc.com");
+            return new NBCHeader(driver);
         }
     }
 }

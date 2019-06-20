@@ -1,14 +1,10 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Support.PageObjects;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AutomationFramework.Pages
 {
     public class NBCHeader : BasePage
     {
-        private static string lnkShowsLocator = "a[href='/sows']";
+        private static string lnkShowsLocator = "a[href='/shows']";
         private static string lnkEpisodesLocator = "a[href='/video']";
         private static string lnkScheduleLocator = "a[href='/schedule']";
         private static string lnkNewsSportsLocator = "//*[contains(text(), 'Sports')]/.."; //XPath locator
@@ -24,19 +20,18 @@ namespace AutomationFramework.Pages
         private IWebElement lnkApp => driver.FindElement(By.CssSelector(lnkAppLocator));
         private IWebElement btnSearch => driver.FindElement(By.CssSelector(btnSearchLocator));
 
-        private NBCHeader(IWebDriver driver)
+        public NBCHeader(IWebDriver driver) : base(driver)
         {
         }
 
-        public NBCHeader ClickSHows()
+        public ShowsPage ClickShows()
         {
             lnkShows.Click();
-            return WaitForPageLoaded();
+            return new ShowsPage(driver).WaitForPageLoaded();
         }
-
         public NBCHeader WaitForPageLoaded()
         {
-            return WaitForPageLoaded();
+            return (NBCHeader)WaitForAnyPageLoaded();
         }
     }
 }
