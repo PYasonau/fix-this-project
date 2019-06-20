@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using AutomationFramework.Utils;
+using NUnit.Allure.Core;
 
 namespace AutomationFramework.Tests
 {
@@ -10,14 +11,16 @@ namespace AutomationFramework.Tests
     {
         [Test]
         [Description("The most stable test")]
-        public void FailedTest()
+        public void PassedTest()
         {
+            Allure.WrapInStep(() => { Console.WriteLine("Passed"); }, "Step 1");
             Assert.Pass("this test will pass");
         }
 
         [Test]
-        public void IgnoreTest()
+        public void IgnoredTest()
         {
+            Allure.WrapInStep(() => { Console.WriteLine("Ignored"); }, "Step 1");
             Assert.Ignore("Will be ignored. Reason");
         }
 
@@ -25,6 +28,7 @@ namespace AutomationFramework.Tests
         [Category("AssertTests")]
         public void Assertion()
         {
+            Allure.WrapInStep(() => { Console.WriteLine("Assertion"); }, "Step 1");
             Assert.Multiple(() =>
             {
                 Assert.That(() => Heplers.ReturnRandomIntTenAsMax() == 6, Is.True.After(30).Seconds.PollEvery(1).Seconds, "Unexpected");
@@ -37,6 +41,7 @@ namespace AutomationFramework.Tests
         [Category("AssertDuringTimeTests")]
         public void AssertDuringTime()
         {
+            Allure.WrapInStep(() => { Console.WriteLine("AssertDuringTime"); }, "Step 1");
             Assert.That(() => Heplers.ReturnRandomIntTenAsMax(), Is.EqualTo(8).After(30).Seconds.PollEvery(1).Seconds);
         }
 
@@ -46,6 +51,7 @@ namespace AutomationFramework.Tests
         [Category("ParamTests")]        
         public void ParamsTest(int number)
         {
+            Allure.WrapInStep(() => { Console.WriteLine("ParamTests"); }, "Step 1");
             Assert.That(number > 6, Is.True, "Unexpected number");
         }
     }

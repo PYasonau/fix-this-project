@@ -1,4 +1,5 @@
 ﻿using AutomationFramework.Pages;
+using NUnit.Allure.Core;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -18,6 +19,7 @@ namespace AutomationFramework.Tests
         {
             Driver = CreateDriver();
 
+            Allure.WrapInStep(() => {}, "Step 1: Check navigation by tabs on Shows Page ");
             var  nbcShows = new NBCHeader(Driver)
                 .ClickSHows()
                 .ClickCurrent()
@@ -25,9 +27,11 @@ namespace AutomationFramework.Tests
                 .ClickThrowback()
                 .ClickAll();
 
+            Allure.WrapInStep(() => {}, $"Step 2: Check Serial '{nbcSerialName}' is displayed on Shows Page");
             Assert.That(nbcShows.IsShowBlockByNameExist(nbcSerialName),
                 Is.True, $"Сериала с именем {nbcSerialName} нет");
 
+            Allure.WrapInStep(() => {}, $"Step 3: Click on Serial by name: '{nbcSerialName}'");
             nbcShows.ClickOnShowBlockByName(nbcSerialName);
         }
     }

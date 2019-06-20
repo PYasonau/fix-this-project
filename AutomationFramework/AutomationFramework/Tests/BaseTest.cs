@@ -1,18 +1,23 @@
-﻿using NUnit.Framework;
+﻿using Allure.Commons;
+using NUnit.Allure.Core;
+using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace AutomationFramework.Tests
 {
     [Parallelizable(ParallelScope.Fixtures)]
-    public class BaseTest
+    [AllureNUnit]
+    public class BaseTest : BaseAllure
     {
         protected IWebDriver Driver;
         private string nbcUrl = "https://www.nbc.com";
+        protected static AllureLifecycle Allure = AllureLifecycle.Instance;
 
         public IWebDriver CreateDriver ()
         {
@@ -20,7 +25,7 @@ namespace AutomationFramework.Tests
             NavigateToSite(Driver);
             return Driver;
         }
-
+       
         [TearDown]
         public void CloseDrivers()
         {
