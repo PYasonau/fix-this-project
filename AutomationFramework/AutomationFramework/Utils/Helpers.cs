@@ -5,7 +5,7 @@ using System.Text;
 
 namespace AutomationFramework.Utils
 {
-    public static class Heplers
+    public static class Helpers
     {
         public static int ReturnRandomIntTenAsMax()
         {

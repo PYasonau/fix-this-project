@@ -32,8 +32,7 @@ namespace AutomationFramework.Pages
         public ShowsPage ClickSHows()
         {
             WaitForElementPresent(By.CssSelector(lnkShowsLocator)).Click();
-            WaitForAnyPageLoaded();
-            return new ShowsPage(driver);
+            return new ShowsPage(driver).WaitForPageLoaded();
         }
     }
 }

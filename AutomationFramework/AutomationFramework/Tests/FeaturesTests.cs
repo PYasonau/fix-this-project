@@ -31,9 +31,9 @@ namespace AutomationFramework.Tests
             Allure.WrapInStep(() => { Console.WriteLine("Assertion"); }, "Step 1");
             Assert.Multiple(() =>
             {
-                Assert.That(() => Heplers.ReturnRandomIntTenAsMax() == 6, Is.True.After(30).Seconds.PollEvery(1).Seconds, "Unexpected");
-                Assert.That(() => Heplers.ReturnRandomIntTenAsMax() == 7, Is.True.After(30).Seconds.PollEvery(1).Seconds, "Unexpected");
-                Assert.That(Heplers.ReturnRandomIntTenAsMax(), Is.Not.EqualTo(11), "Unexpected");
+                Assert.That(() => Helpers.ReturnRandomIntTenAsMax() == 6, Is.True.After(30).Seconds.PollEvery(1).Seconds, "Unexpected");
+                Assert.That(() => Helpers.ReturnRandomIntTenAsMax() == 7, Is.True.After(30).Seconds.PollEvery(1).Seconds, "Unexpected");
+                Assert.That(Helpers.ReturnRandomIntTenAsMax(), Is.Not.EqualTo(11), "Unexpected");
             });
         }
 
@@ -42,13 +42,12 @@ namespace AutomationFramework.Tests
         public void AssertDuringTime()
         {
             Allure.WrapInStep(() => { Console.WriteLine("AssertDuringTime"); }, "Step 1");
-            Assert.That(() => Heplers.ReturnRandomIntTenAsMax(), Is.EqualTo(8).After(30).Seconds.PollEvery(1).Seconds);
+            Assert.That(() => Helpers.ReturnRandomIntTenAsMax(), Is.EqualTo(8).After(30).Seconds.PollEvery(1).Seconds);
         }
 
-        [Test]
         [TestCase(7)]
         [TestCase(5)]
-        [Category("ParamTests")]        
+        [Category("ParamTests")]
         public void ParamsTest(int number)
         {
             Allure.WrapInStep(() => { Console.WriteLine("ParamTests"); }, "Step 1");

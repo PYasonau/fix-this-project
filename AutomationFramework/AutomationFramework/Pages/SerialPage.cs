@@ -24,13 +24,7 @@ namespace AutomationFramework.Pages
 
         public SerialPage ClosePopUpIfPresent()
         {
-            try{
-                var popup = WaitForElementPresent(By.CssSelector(btnClosePopUp), 2);
-                if (popup != null)
-                    driver.FindElement(By.CssSelector(btnClosePopUp)).Click();
-            }
-            catch (Exception) {}
-
+            WaitForElementPresent(By.CssSelector(btnClosePopUp), 2).Click();
             return WaitForPageLoaded();
         }
 

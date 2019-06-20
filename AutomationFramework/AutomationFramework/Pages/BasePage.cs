@@ -24,9 +24,10 @@ namespace AutomationFramework.Pages
             return driver.FindElement(locator);
         }
 
-        public void WaitForElementNotPresent(By locator, int timeInSeconds = 15)
+        public BasePage WaitForElementNotPresent(By locator, int timeInSeconds = 15)
         {
             new WebDriverWait(driver, TimeSpan.FromSeconds(timeInSeconds)).Until(d => !IsElementPresent(locator));
+            return this;
         }
 
         public void WaitForAnyPageLoaded()
