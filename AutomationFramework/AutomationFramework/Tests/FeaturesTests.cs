@@ -2,72 +2,56 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using AutomationFramework.Utils;
+using NUnit.Allure.Core;
 
 namespace AutomationFramework.Tests
 {
-    private class FeaturesTests
+    public class FeaturesTests : BaseTest
     {
-        public class PassTest : BaseTest
+        [Test]
+        [Description("The most stable test")]
+        public void PassedTest()
         {
-            [Description]
-            public void FailedTest()
-            {
-                Assert.Pass("this test will pass");
-            }
+            Allure.WrapInStep(() => { Console.WriteLine("Passed"); }, "Step 1");
+            Assert.Pass("this test will pass");
         }
 
-        public class IgnoreTest : BaseTest
+        [Test]
+        public void IgnoredTest()
         {
-            [TestCase]
-            public void Passed()
-            {
-                Assert.Ignore("Will be ignored. Reason");
-            }
+            Allure.WrapInStep(() => { Console.WriteLine("Ignored"); }, "Step 1");
+            Assert.Ignore("Will be ignored. Reason");
         }
 
-        public class AssertTest : BaseTest
+        [Test]
+        [Category("AssertTests")]
+        public void Assertion()
         {
-
-            private string Return5() =>  () => { return 2; }
-
-            [TEST]
-            public void Assertion()
+            Allure.WrapInStep(() => { Console.WriteLine("Assertion"); }, "Step 1");
+            Assert.Multiple(() =>
             {
-                Assert.That(() => 
-                {
-                    Assert.True(Return5() == 6, "Expected");
-                    Assert.That(Return5() == 7, Is.True, "Unexpected");
-                    Assert.That(Return5(), Is.Not.EqualTo(8), "Unexpected");
-                });
-            }
+                Assert.That(() => Helpers.ReturnRandomIntTenAsMax() == 6, Is.True.After(30).Seconds.PollEvery(1).Seconds, "Unexpected");
+                Assert.That(() => Helpers.ReturnRandomIntTenAsMax() == 7, Is.True.After(30).Seconds.PollEvery(1).Seconds, "Unexpected");
+                Assert.That(Helpers.ReturnRandomIntTenAsMax(), Is.Not.EqualTo(11), "Unexpected");
+            });
         }
 
-        public class AssertDuringTimeTest
+        [Test]
+        [Category("AssertDuringTimeTests")]
+        public void AssertDuringTime()
         {
-
-            private int Return5()
-            {
-                var number = new Random().Next(1000);
-                TestContext.Progress.WriteLine($"Generated number: {number}");
-                return number;
-            }
-
-            [Test]
-            public void AssertDuringTime()
-            {
-                Assert.That(Return5(), Is.EqualTo(8).After(30).Seconds.PollEvery(1).Seconds);
-            }
+            Allure.WrapInStep(() => { Console.WriteLine("AssertDuringTime"); }, "Step 1");
+            Assert.That(() => Helpers.ReturnRandomIntTenAsMax(), Is.EqualTo(8).After(30).Seconds.PollEvery(1).Seconds);
         }
 
-        public class Params : BaseTest
+        [TestCase(7)]
+        [TestCase(5)]
+        [Category("ParamTests")]
+        public void ParamsTest(int number)
         {
-            [TestCaseSource(5)]
-            [TestCase(7)]
-            [Test(9)]
-            public void ParamsTest(public number)
-            {
-                Assert.False(number () => "Unexpected number");
-            }
+            Allure.WrapInStep(() => { Console.WriteLine("ParamTests"); }, "Step 1");
+            Assert.That(number > 6, Is.True, "Unexpected number");
         }
     }
 }

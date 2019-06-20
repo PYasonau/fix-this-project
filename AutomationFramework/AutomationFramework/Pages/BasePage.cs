@@ -16,16 +16,18 @@ namespace AutomationFramework.Pages
 
         private By spinner = By.CssSelector(".basic-loading-page.basic-loading-page--show-page");
 
-        public bool IsElementPresent(By locator) => driver.FindElements(locator).Count = 0;
+        public bool IsElementPresent(By locator) => driver.FindElements(locator).Count > 0;
 
-        public void WaitForElementPresent(By locator, int timeInSeconds = 0)
+        public IWebElement WaitForElementPresent(By locator, int timeInSeconds = 15)
         {
             new WebDriverWait(driver, TimeSpan.FromSeconds(timeInSeconds)).Until(d => IsElementPresent(locator));
+            return driver.FindElement(locator);
         }
 
-        public void WaitForElementNotPresent(By locator, int timeInSeconds = 0)
+        public BasePage WaitForElementNotPresent(By locator, int timeInSeconds = 15)
         {
             new WebDriverWait(driver, TimeSpan.FromSeconds(timeInSeconds)).Until(d => !IsElementPresent(locator));
+            return this;
         }
 
         public void WaitForAnyPageLoaded()
